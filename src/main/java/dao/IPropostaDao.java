@@ -9,4 +9,5 @@ public interface IPropostaDao {
 	public void update(Proposta proposta);
 	public ArrayList<Proposta> retrieve();
 	public void delete(Integer id);
+	public ArrayList<Proposta> listByCpf(String cpf); 
 }

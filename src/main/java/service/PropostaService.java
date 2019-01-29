@@ -9,8 +9,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
+import controller.AnalisePropostaController;
 import dao.FactoryDao;
 import model.Proposta;
 
@@ -31,7 +33,7 @@ public class PropostaService {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public Response create(Proposta proposta) {
-		FactoryDao.getPropostaDAO().create(proposta);
+		new AnalisePropostaController().analisarProposta(proposta);
 		return Response.ok().header("Access-Control-Allow-Origin", "*")
 			      .header("Access-Control-Allow-Credentials", "true")
 			      .header("Access-Control-Allow-Headers",
@@ -57,5 +59,14 @@ public class PropostaService {
 		return Response.ok().entity(new ServiceResponse(200, "Tarefa Atualizada")).build();
 	}
 
+	@GET
+	@Path("/cpf")
+	@Produces("application/json")
+	public ArrayList<Proposta> retrieve(@QueryParam("cpf") String cpf) {
+		ArrayList<Proposta> todoList = new ArrayList<Proposta>();
+		todoList = FactoryDao.getPropostaDAO().listByCpf(cpf);
+		return todoList;
+	}
+	
 
 }

@@ -9,14 +9,13 @@ import java.util.ArrayList;
 
 import model.Proposta;
 
-
-public class PropostaDaoImpl implements IPropostaDao{
+public class PropostaDaoImpl implements IPropostaDao {
 
 	public void create(Proposta proposta) {
 		Connection conn = ConexaoBanco.conexao();
 		try {
 			try {
-				String sql = "insert into proposta(nome, cpf, idade, sexo, estado_civil, estado, dependentes, renda) values (?,?,?,?,?,?,?,?)";
+				String sql = "insert into proposta(nome, cpf, idade, sexo, estado_civil, estado, dependentes, renda, resultado_analise, limite) values (?,?,?,?,?,?,?,?,?,?)";
 				PreparedStatement ps = conn.prepareStatement(sql);
 				ps.setString(1, proposta.getNome());
 				ps.setString(2, proposta.getCpf());
@@ -26,6 +25,8 @@ public class PropostaDaoImpl implements IPropostaDao{
 				ps.setString(6, proposta.getEstado());
 				ps.setInt(7, proposta.getDependentes());
 				ps.setInt(8, proposta.getRenda());
+				ps.setString(9, proposta.getResultadoAnalise());
+				ps.setString(10, proposta.getLimite());
 				ps.execute();
 			} finally {
 				conn.close();
@@ -54,7 +55,6 @@ public class PropostaDaoImpl implements IPropostaDao{
 			System.out.println("Erro : " + e.getMessage());
 		}
 	}
-	
 
 	public ArrayList<Proposta> retrieve() {
 		ArrayList<Proposta> lista = new ArrayList<Proposta>();
@@ -64,7 +64,40 @@ public class PropostaDaoImpl implements IPropostaDao{
 				String sql = "select * from proposta";
 				Statement st = conn.createStatement();
 				ResultSet rs = st.executeQuery(sql);
-				while (rs.next()){
+				while (rs.next()) {
+					Proposta proposta = new Proposta();
+					proposta.setId(rs.getInt("id"));
+					proposta.setNome(rs.getString("nome"));
+					proposta.setCpf(rs.getString("cpf"));
+					proposta.setSexo(rs.getString("sexo"));
+					proposta.setDependentes(rs.getInt("dependentes"));
+					proposta.setIdade(rs.getInt("idade"));
+					proposta.setEstado(rs.getString("estado"));
+					proposta.setEstadoCivil(rs.getString("estado_civil"));
+					proposta.setRenda(rs.getInt("renda"));
+					proposta.setResultadoAnalise(rs.getString("resultado_analise"));
+					proposta.setLimite(rs.getString("limite"));
+					lista.add(proposta);
+				}
+				return lista;
+			} finally {
+				conn.close();
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro : " + e.getMessage());
+		}
+		return lista;
+	}
+	
+	public ArrayList<Proposta> listByCpf(String cpf) {
+		ArrayList<Proposta> lista = new ArrayList<Proposta>();
+		Connection conn = ConexaoBanco.conexao();
+		try {
+			try {
+				String sql = "select * from proposta where cpf like '" + cpf + "'";
+				Statement st = conn.createStatement();
+				ResultSet rs = st.executeQuery(sql);
+				while (rs.next()) {
 					Proposta proposta = new Proposta();
 					proposta.setId(rs.getInt("id"));
 					proposta.setNome(rs.getString("nome"));
@@ -104,4 +137,6 @@ public class PropostaDaoImpl implements IPropostaDao{
 			System.out.println("Erro : " + e.getMessage());
 		}
 	}
+	
+	
 }
