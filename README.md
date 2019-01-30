@@ -1,7 +1,8 @@
-Para executar esse projeto basta importá-lo no Eclipae, depois adicionar o servidor apache toomcat e executar o projeto através do toomcat. Feito esses passos o projeto deve rodar sem problemas. 
-Por fim é necessário criar uma tabela no banco de dados Postgres 
+Para executar esse projeto basta importá-lo no Eclipse, depois adicionar o servidor apache toomcat e executar o projeto através do toomcat. Feito esses passos o projeto deve rodar sem problemas. 
+Por fim é necessário criar uma tabela no banco de dados Postgres e configurar a url de conexão no arquivo https://github.com/chicofaf/desafio-backend/blob/master/src/main/java/dao/ConexaoBanco.java.
 
-O seguinte script pode ser utilizado:
+
+O seguinte script pode ser utilizado pra criar a tabela:
 
 CREATE TABLE public.proposta
 (
